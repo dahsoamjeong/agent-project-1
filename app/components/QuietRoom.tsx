@@ -1,20 +1,23 @@
 import { Suspense } from "react";
 import Backdrop from "./Backdrop";
 import Doors from "./Doors";
+import LanguageSwitch from "./LanguageSwitch";
+import { getDictionary, getLocale } from "@/content/i18n";
 import { placeForToday } from "@/content/places";
 import { roomByPath } from "@/content/rooms";
 
 async function QuietRoomScreen({ path }: { path: string }) {
   const room = roomByPath(path);
-  const place = await placeForToday();
+  const [locale, dict, place] = await Promise.all([getLocale(), getDictionary(), placeForToday()]);
   return (
     <main className="screen">
       <Backdrop place={place} />
-      <p className="eyebrow rise">준비 중인 방</p>
+      <LanguageSwitch path={path} />
+      <p className="eyebrow rise">{dict.roomInPreparation}</p>
       <div className="center rise">
-        <h1 className="title">{room.name}</h1>
-        <p className="sub">{room.summary}</p>
-        <p className="presence">천천히 준비하고 있어요.</p>
+        <h1 className="title">{room.name[locale]}</h1>
+        <p className="sub">{room.summary[locale]}</p>
+        <p className="presence">{dict.preparingSlowly}</p>
       </div>
       <Doors current={path} />
     </main>

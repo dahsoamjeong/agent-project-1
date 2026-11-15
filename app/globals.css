@@ -19,7 +19,7 @@ body {
 body {
   background: var(--night);
   color: var(--ink);
-  font-family: "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
   font-weight: 300;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -52,6 +52,22 @@ a {
   font-size: 0.8rem;
   letter-spacing: 0.18em;
   color: var(--ink-faint);
+}
+
+.language {
+  position: absolute !important;
+  top: calc(18px + env(safe-area-inset-top));
+  right: 16px;
+  padding: 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  transition: color 0.8s ease;
+}
+
+.language:hover,
+.language:focus-visible {
+  color: var(--ink);
 }
 
 .center {
@@ -159,6 +175,37 @@ a {
   background: linear-gradient(to bottom, rgba(10, 18, 30, 0.35), rgba(10, 18, 30, 0.05) 40%, rgba(10, 18, 30, 0.45));
 }
 
+/* 실제 사진 배경: 화면을 가득 채우고 아주 천천히 움직인다 */
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: drift 60s ease-in-out infinite alternate;
+}
+
+.backdrop.has-photo::before {
+  display: none;
+}
+
+.backdrop.has-photo::after {
+  z-index: 1;
+}
+
+.backdrop .light {
+  z-index: 2;
+}
+
+@keyframes drift {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14) translateY(-1.5%);
+  }
+}
+
 /* 함께 쉬는 사람들: 수면 위 작은 빛 */
 .light {
   position: absolute;
@@ -195,6 +242,7 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .rise,
   .light,
+  .photo,
   .backdrop::before {
     animation: none;
   }
