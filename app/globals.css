@@ -1,0 +1,201 @@
+:root {
+  --ink: #f4f1ea;
+  --ink-soft: rgba(244, 241, 234, 0.72);
+  --ink-faint: rgba(244, 241, 234, 0.5);
+  --night: #14263d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--night);
+  color: var(--ink);
+  font-family: "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 화면 가득 배경 위에 내용을 올리는 공통 틀 */
+.screen {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 24px calc(28px + env(safe-area-inset-bottom));
+  text-align: center;
+  overflow: hidden;
+}
+
+.screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.title {
+  font-size: clamp(1.9rem, 8vw, 2.6rem);
+  font-weight: 200;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.sub {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.presence {
+  margin-top: 26px;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+
+.enter {
+  margin-top: 30px;
+  min-height: 48px;
+  padding: 12px 34px;
+  border: 1px solid rgba(244, 241, 234, 0.45);
+  border-radius: 999px;
+  background: rgba(244, 241, 234, 0.08);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(6px);
+  transition: background 1.2s ease;
+}
+
+.enter:hover,
+.enter:focus-visible {
+  background: rgba(244, 241, 234, 0.18);
+}
+
+.doors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 22px;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.doors a {
+  padding: 10px 2px;
+  transition: color 0.8s ease;
+}
+
+.doors a:hover,
+.doors a:focus-visible {
+  color: var(--ink);
+}
+
+/* 화면이 천천히 떠오르는 느낌 */
+.rise {
+  animation: rise 2.4s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── 임시 배경: 실제 영상/사진이 준비되면 이 부분이 교체된다 ── */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to bottom, var(--sky) 0%, var(--horizon) 52%, var(--water) 53%, var(--night) 100%);
+}
+
+.backdrop::before {
+  /* 수평선 위 은은한 빛 */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 22% at 50% 52%, rgba(255, 244, 220, 0.38), transparent 70%);
+  animation: breathe 14s ease-in-out infinite;
+}
+
+.backdrop::after {
+  /* 글자가 잘 보이도록 살짝 어둡게 */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 18, 30, 0.35), rgba(10, 18, 30, 0.05) 40%, rgba(10, 18, 30, 0.45));
+}
+
+/* 함께 쉬는 사람들: 수면 위 작은 빛 */
+.light {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 247, 225, 0.9);
+  box-shadow: 0 0 14px 5px rgba(255, 240, 200, 0.35);
+  animation: glimmer 7s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes glimmer {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .light,
+  .backdrop::before {
+    animation: none;
+  }
+}
