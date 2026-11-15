@@ -54,19 +54,34 @@ a {
   color: var(--ink-faint);
 }
 
-.language {
+/* 화면 모서리의 작은 글자 버튼: 언어 바꾸기(오른쪽), 소리 켜고 끄기(왼쪽) */
+.language,
+.corner {
   position: absolute !important;
+  z-index: 3 !important;
   top: calc(18px + env(safe-area-inset-top));
-  right: 16px;
   padding: 10px;
+  border: 0;
+  background: none;
+  font: inherit;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: var(--ink-faint);
   transition: color 0.8s ease;
 }
 
+.language {
+  right: 16px;
+}
+
+.corner-left {
+  left: 16px;
+}
+
 .language:hover,
-.language:focus-visible {
+.language:focus-visible,
+.corner:hover,
+.corner:focus-visible {
   color: var(--ink);
 }
 
@@ -132,6 +147,196 @@ a {
 .doors a:hover,
 .doors a:focus-visible {
   color: var(--ink);
+}
+
+/* ── 방 1의 장면들 ── */
+
+/* 한 장면: 위(작은 제목), 가운데(내용), 아래(작은 버튼)로 나뉜다. 천천히 떠오르고 천천히 흐려진다. */
+.scene {
+  flex: 1;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 44px;
+  animation: rise 2.4s ease both;
+  transition: opacity 1.2s ease;
+}
+
+.scene-leaving {
+  opacity: 0;
+}
+
+.lead {
+  font-size: clamp(1.25rem, 5.4vw, 1.55rem);
+  font-weight: 300;
+  line-height: 1.75;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+.quote::before {
+  content: "\201C";
+}
+
+.quote::after {
+  content: "\201D";
+}
+
+.quiet {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  transition: color 0.8s ease;
+}
+
+.quiet:hover,
+.quiet:focus-visible {
+  color: var(--ink);
+}
+
+.enter:disabled {
+  opacity: 0.4;
+}
+
+.enter-on {
+  background: rgba(244, 241, 234, 0.24);
+  border-color: rgba(244, 241, 234, 0.75);
+}
+
+/* 시간이 흐르는 가느다란 선 */
+.timeline {
+  width: 120px;
+  height: 1px;
+  margin-top: 28px;
+  background: rgba(244, 241, 234, 0.2);
+  overflow: hidden;
+}
+
+.timeline-fill {
+  height: 100%;
+  background: rgba(244, 241, 234, 0.8);
+  transform-origin: left;
+  transition: transform 1s linear;
+}
+
+/* 몸 열기: 몇 번째 동작인지 알려주는 작은 점 */
+.dots {
+  display: flex;
+  gap: 10px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(244, 241, 234, 0.25);
+  transition: background 1.2s ease;
+}
+
+.dot-on {
+  background: rgba(244, 241, 234, 0.85);
+}
+
+/* 숨 고르기: 들숨과 날숨에 맞춰 커졌다 작아지는 원 (10초에 한 번) */
+.breath-ring {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(244, 241, 234, 0.55);
+  border-radius: 50%;
+  background: rgba(244, 241, 234, 0.06);
+  animation: inhale 10s ease-in-out infinite;
+}
+
+@keyframes inhale {
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.55;
+  }
+  45%,
+  55% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* 한 문장 나누기 */
+.sentence-input {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(244, 241, 234, 0.35);
+  border-radius: 18px;
+  background: rgba(10, 18, 30, 0.28);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem; /* 16px 이상이어야 아이폰에서 화면이 확대되지 않는다 */
+  line-height: 1.7;
+  text-align: center;
+  resize: none;
+  backdrop-filter: blur(6px);
+}
+
+.sentence-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.sentence-input:focus {
+  outline: none;
+  border-color: rgba(244, 241, 234, 0.7);
+}
+
+.count {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+/* 다시 일상으로 */
+.dawn {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0 !important;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 120% 45% at 50% 52%, rgba(255, 214, 160, 0.85), transparent 72%),
+    linear-gradient(to bottom, rgba(255, 190, 150, 0.3), rgba(255, 226, 190, 0.42) 50%, rgba(120, 150, 170, 0.25));
+  transition: opacity 30s ease-in-out;
+  pointer-events: none;
+}
+
+.screen-dawn .dawn {
+  opacity: 1;
+}
+
+/* 배경이 밝아져도 글자가 또렷하게 읽히도록 */
+.screen-dawn .scene {
+  text-shadow: 0 1px 14px rgba(40, 28, 16, 0.55);
+}
+
+.screen-dawn .eyebrow,
+.screen-dawn .sub,
+.screen-dawn .presence,
+.screen-dawn .doors {
+  color: rgba(255, 252, 244, 0.92);
+}
+
+.action {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(244, 241, 234, 0.4);
+}
+
+.farewell {
+  margin-top: 26px;
 }
 
 /* 화면이 천천히 떠오르는 느낌 */
@@ -241,6 +446,8 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
+  .scene,
+  .breath-ring,
   .light,
   .photo,
   .backdrop::before {

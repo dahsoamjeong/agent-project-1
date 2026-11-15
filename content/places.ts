@@ -1,4 +1,4 @@
-import { connection } from "next/server";
+import { pickForDay, today } from "./day";
 import type { Text } from "./i18n";
 
 // 오늘의 항구: 사람들이 가보고 싶었던 세계의 좋은 곳들.
@@ -62,12 +62,8 @@ export const places: Place[] = [
   },
 ];
 
-/** 한국 시간 기준 날짜로 오늘의 항구를 고른다. 매일 한 곳씩 차례로 바뀐다. */
+/** 오늘의 항구. 매일 한 곳씩 차례로 바뀐다. */
 export async function placeForToday(): Promise<Place> {
-  // 미리 만들어둔 화면이 아니라, 방문한 순간의 날짜로 고르도록 기다린다.
-  await connection();
-  const now = new Date();
-  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-  const dayNumber = Math.floor(kst.getTime() / (24 * 60 * 60 * 1000));
-  return places[dayNumber % places.length];
+  const { dayNumber } = await today();
+  return pickForDay(places, dayNumber);
 }
