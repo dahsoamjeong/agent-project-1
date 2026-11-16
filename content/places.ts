@@ -5,6 +5,7 @@ import type { Text } from "./i18n";
 // 지금은 임시 목록이며, 3단계에서 소밍이 코드 없이 고칠 수 있는 관리 화면(저장소)으로 옮긴다.
 //
 // photo: public/places/ 안의 사진 파일 이름. 없으면 colors로 그린 임시 배경이 나온다.
+// focus: 사진에서 화면 가운데에 둘 지점 (가로% 세로%). 가로로 긴 사진이 휴대폰에서 잘릴 때 쓴다.
 // credit: 사진의 출처와 사용 조건 (사진을 넣을 때 반드시 함께 적는다).
 // colors: 사진이 없을 때 쓰는 임시 배경 색 (하늘, 수평선, 물).
 
@@ -13,16 +14,28 @@ export type Place = {
   country: Text;
   line: Text;
   photo?: string;
+  focus?: string;
   credit?: string;
   colors: [string, string, string];
 };
 
 export const places: Place[] = [
   {
-    name: { ko: "바아 환초", en: "Baa Atoll" },
+    name: { ko: "투명한 라군", en: "A clear lagoon" },
     country: { ko: "몰디브", en: "Maldives" },
-    line: { ko: "얕고 맑은 바다 위", en: "Over shallow, clear water" },
+    line: { ko: "얕고 맑은 바다 위, 작은 배 한 척", en: "One small boat on shallow, clear water" },
+    photo: "maldives-lagoon.webp",
+    credit: "소밍이 전달한 사진. 출처와 사용 조건 확인 필요.",
     colors: ["#1b3a5c", "#5fa8b8", "#0f5c6e"],
+  },
+  {
+    name: { ko: "해 질 녘의 해변", en: "A beach at sunset" },
+    country: { ko: "몰디브", en: "Maldives" },
+    line: { ko: "야자수 아래, 천천히 흔들리는 그네", en: "A swing moving slowly under a palm tree" },
+    photo: "maldives-sunset.webp",
+    focus: "40% 50%",
+    credit: "소밍이 전달한 사진. 출처와 사용 조건 확인 필요.",
+    colors: ["#243a5e", "#f0b98f", "#1f6a7a"],
   },
   {
     name: { ko: "테카포 호수", en: "Lake Tekapo" },
@@ -62,8 +75,12 @@ export const places: Place[] = [
   },
 ];
 
-/** 오늘의 항구. 매일 한 곳씩 차례로 바뀐다. */
-export async function placeForToday(): Promise<Place> {
+/**
+ * 오늘의 항구. 매일 한 곳씩 차례로 바뀐다.
+ * preview: 주소 끝에 ?place=2 처럼 번호를 붙이면 그 순서의 장소를 미리 볼 수 있다 (1부터 시작).
+ */
+export async function placeForToday(preview?: string): Promise<Place> {
   const { dayNumber } = await today();
-  return pickForDay(places, dayNumber);
+  const chosen = preview ? places[Number(preview) - 1] : undefined;
+  return chosen ?? pickForDay(places, dayNumber);
 }

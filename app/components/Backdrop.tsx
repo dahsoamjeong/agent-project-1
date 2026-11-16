@@ -13,7 +13,7 @@ export default function Backdrop({ place, lights = 0 }: { place: Place; lights?:
     <div className={place.photo ? "backdrop has-photo" : "backdrop"} style={style} aria-hidden="true">
       {place.photo && (
         // eslint-disable-next-line @next/next/no-img-element -- 화면 가득 채우는 배경이라 일반 img로 충분하다
-        <img className="photo" src={`/places/${place.photo}`} alt="" />
+        <img className="photo" src={`/places/${place.photo}`} alt="" style={{ objectPosition: place.focus }} />
       )}
       {Array.from({ length: count }, (_, i) => (
         <span

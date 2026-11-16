@@ -40,7 +40,22 @@ a {
   justify-content: space-between;
   padding: 28px 24px calc(28px + env(safe-area-inset-bottom));
   text-align: center;
-  overflow: hidden;
+  /* clip: 안쪽 내용이 커져도 화면 틀이 밀려 움직이지 않게 한다 */
+  overflow: clip;
+}
+
+/* 실제 사진 위에서는 작은 글자도 또렷하게 */
+.screen:has(.has-photo) {
+  --ink-soft: rgba(255, 253, 247, 0.94);
+  --ink-faint: rgba(255, 253, 247, 0.82);
+}
+
+.screen:has(.has-photo) .scene,
+.screen:has(.has-photo) .corner,
+.screen:has(.has-photo) .language {
+  text-shadow:
+    0 1px 3px rgba(4, 10, 20, 0.5),
+    0 0 20px rgba(4, 10, 20, 0.55);
 }
 
 .screen > * {
@@ -163,6 +178,7 @@ a {
   padding-top: 44px;
   animation: rise 2.4s ease both;
   transition: opacity 1.2s ease;
+  text-shadow: 0 1px 12px rgba(8, 16, 28, 0.5);
 }
 
 .scene-leaving {
@@ -360,6 +376,7 @@ a {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: clip;
   background: linear-gradient(to bottom, var(--sky) 0%, var(--horizon) 52%, var(--water) 53%, var(--night) 100%);
 }
 
@@ -394,8 +411,10 @@ a {
   display: none;
 }
 
+/* 밝은 사진 위에서도 흰 글자가 읽히도록, 사진을 살짝 가라앉힌다 */
 .backdrop.has-photo::after {
   z-index: 1;
+  background: linear-gradient(to bottom, rgba(8, 16, 28, 0.5), rgba(8, 16, 28, 0.36) 45%, rgba(8, 16, 28, 0.62));
 }
 
 .backdrop .light {

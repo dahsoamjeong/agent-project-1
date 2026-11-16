@@ -23,11 +23,12 @@ import {
 const TEMP_RESTING_NOW = 7;
 
 // 서버에서 오늘의 내용을 골라, 화면을 움직이는 Journey에게 글자만 건네준다.
-async function TodayRest() {
+async function TodayRest({ searchParams }: Pick<PageProps<"/[lang]">, "searchParams">) {
+  const { place: preview } = await searchParams;
   const [locale, dict, place, { dayNumber, dateKey }] = await Promise.all([
     getLocale(),
     getDictionary(),
-    placeForToday(),
+    placeForToday(typeof preview === "string" ? preview : undefined),
     today(),
   ]);
 
@@ -74,10 +75,10 @@ async function TodayRest() {
   );
 }
 
-export default function Page() {
+export default function Page({ searchParams }: PageProps<"/[lang]">) {
   return (
     <Suspense>
-      <TodayRest />
+      <TodayRest searchParams={searchParams} />
     </Suspense>
   );
 }
