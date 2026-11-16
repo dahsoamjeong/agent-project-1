@@ -333,6 +333,19 @@ a {
   opacity: 1;
 }
 
+/* 실제 사진 위에서는 뿌연 새벽빛을 덮지 않는다. 대신 사진을 가라앉히던 어둠이 천천히 걷히며 밝아진다. */
+.screen:has(.has-photo) .dawn {
+  display: none;
+}
+
+.backdrop.has-photo::after {
+  transition: opacity 30s ease-in-out;
+}
+
+.screen-dawn .backdrop.has-photo::after {
+  opacity: 0.55;
+}
+
 /* 배경이 밝아져도 글자가 또렷하게 읽히도록 */
 .screen-dawn .scene {
   text-shadow: 0 1px 14px rgba(40, 28, 16, 0.55);
